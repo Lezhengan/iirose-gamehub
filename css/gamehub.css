@@ -1,0 +1,669 @@
+/* ============================================
+   iirose 游戏大厅 — GameHub 样式表
+   前缀: gh- ｜ 使用 !important 防止被覆盖
+   设计: 粉色系 + 深色毛玻璃
+   ============================================ */
+
+/* ---------- 基础重置与根变量 ---------- */
+.gh-root {
+  --gh-pink: #f6a !important;
+  --gh-pink-light: #f8a !important;
+  --gh-pink-hover: #ff8cb8 !important;
+  --gh-pink-active: #e8598e !important;
+  --gh-bg: rgba(20, 20, 30, 0.92) !important;
+  --gh-bg-glass: rgba(25, 25, 40, 0.85) !important;
+  --gh-text: #eee !important;
+  --gh-text-dim: #999 !important;
+  --gh-radius-sm: 8px !important;
+  --gh-radius-md: 12px !important;
+  --gh-radius-lg: 16px !important;
+  --gh-shadow: 0 4px 24px rgba(0, 0, 0, 0.5) !important;
+  --gh-shadow-hover: 0 8px 28px rgba(0, 0, 0, 0.55) !important;
+  --gh-shadow-btn: 0 4px 16px rgba(255, 102, 170, 0.35) !important;
+  --gh-transition: 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28) !important;
+  --gh-transition-fast: 0.2s ease !important;
+  --gh-scrollbar-width: 4px !important;
+}
+
+/* ============================================
+   1. 悬浮按钮 (右下角触发按钮)
+   ============================================ */
+.gh-fab {
+  position: fixed !important;
+  bottom: 28px !important;
+  right: 28px !important;
+  z-index: 2147483646 !important;
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 50% !important;
+  border: none !important;
+  outline: none !important;
+  cursor: pointer !important;
+  background: linear-gradient(135deg, var(--gh-pink), var(--gh-pink-light)) !important;
+  box-shadow: var(--gh-shadow-btn) !important;
+  font-size: 28px !important;
+  line-height: 56px !important;
+  text-align: center !important;
+  transition: transform var(--gh-transition-fast), box-shadow var(--gh-transition-fast) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+.gh-fab:hover {
+  transform: scale(1.08) !important;
+  box-shadow: 0 6px 24px rgba(255, 102, 170, 0.5) !important;
+}
+
+.gh-fab:active {
+  transform: scale(0.94) !important;
+  box-shadow: 0 2px 10px rgba(255, 102, 170, 0.3) !important;
+}
+
+/* ============================================
+   2. 游戏大厅面板
+   ============================================ */
+.gh-panel {
+  display: none !important; /* 默认隐藏，JS 控制显示 */
+  position: fixed !important;
+  bottom: 96px !important;
+  right: 28px !important;
+  z-index: 2147483645 !important;
+  width: 380px !important;
+  max-height: 70vh !important;
+  background: var(--gh-bg) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: var(--gh-radius-lg) !important;
+  box-shadow: var(--gh-shadow) !important;
+  color: var(--gh-text) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  overflow: hidden !important;
+  flex-direction: column !important;
+  transform-origin: bottom right !important;
+  animation: gh-panel-in 0.3s ease !important;
+}
+
+/* JS 通过添加 gh-open 类来显示面板 */
+.gh-panel.gh-open {
+  display: flex !important;
+}
+
+@keyframes gh-panel-in {
+  from {
+    opacity: 0 !important;
+    transform: scale(0.88) translateY(12px) !important;
+  }
+  to {
+    opacity: 1 !important;
+    transform: scale(1) translateY(0) !important;
+  }
+}
+
+/* ---------- 面板头部 ---------- */
+.gh-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 16px 20px 12px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  flex-shrink: 0 !important;
+}
+
+.gh-header-title {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  letter-spacing: 0.5px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.gh-header-title::before {
+  content: "🎮" !important;
+  font-size: 20px !important;
+}
+
+.gh-header-close {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  border: none !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--gh-text-dim) !important;
+  font-size: 18px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background var(--gh-transition-fast), color var(--gh-transition-fast) !important;
+}
+
+.gh-header-close:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #fff !important;
+}
+
+/* ---------- 面板内容区域（可滚动） ---------- */
+.gh-body {
+  padding: 16px 20px 20px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  flex: 1 !important;
+}
+
+/* ============================================
+   3. 游戏卡片网格
+   ============================================ */
+.gh-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.gh-card {
+  position: relative !important;
+  width: 100% !important;
+  height: 180px !important;
+  border-radius: var(--gh-radius-md) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  transition: transform var(--gh-transition-fast), box-shadow var(--gh-transition-fast), background var(--gh-transition-fast) !important;
+  overflow: hidden !important;
+  text-decoration: none !important;
+}
+
+.gh-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+.gh-card:active {
+  transform: translateY(-1px) scale(0.97) !important;
+}
+
+/* ---------- 游戏图标 (大号 Emoji 圆形背景) ---------- */
+.gh-icon {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 32px !important;
+  line-height: 1 !important;
+  background: rgba(255, 102, 170, 0.15) !important;
+  transition: background var(--gh-transition-fast), transform var(--gh-transition-fast) !important;
+  flex-shrink: 0 !important;
+}
+
+.gh-card:hover .gh-icon {
+  background: rgba(255, 102, 170, 0.22) !important;
+  transform: scale(1.06) !important;
+}
+
+/* ---------- 游戏标题 ---------- */
+.gh-title {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  text-align: center !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  letter-spacing: 0.3px !important;
+}
+
+/* ---------- 游戏描述/副标题 ---------- */
+.gh-desc {
+  font-size: 12px !important;
+  color: var(--gh-text-dim) !important;
+  text-align: center !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* ============================================
+   4. 按钮样式
+   ============================================ */
+.gh-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 8px 20px !important;
+  border-radius: var(--gh-radius-sm) !important;
+  border: none !important;
+  outline: none !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  transition: background var(--gh-transition-fast), transform var(--gh-transition-fast), box-shadow var(--gh-transition-fast) !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  text-decoration: none !important;
+}
+
+/* 主按钮 — 粉色 */
+.gh-btn-primary {
+  background: linear-gradient(135deg, var(--gh-pink), var(--gh-pink-light)) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 12px rgba(255, 102, 170, 0.3) !important;
+}
+
+.gh-btn-primary:hover {
+  background: linear-gradient(135deg, var(--gh-pink-hover), #ff9ac2) !important;
+  box-shadow: 0 4px 18px rgba(255, 102, 170, 0.45) !important;
+  transform: translateY(-1px) !important;
+}
+
+.gh-btn-primary:active {
+  background: var(--gh-pink-active) !important;
+  box-shadow: 0 1px 6px rgba(255, 102, 170, 0.25) !important;
+  transform: translateY(0) scale(0.97) !important;
+}
+
+/* 次要按钮 — 半透明 */
+.gh-btn-secondary {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: var(--gh-text) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.gh-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.14) !important;
+}
+
+.gh-btn-secondary:active {
+  background: rgba(255, 255, 255, 0.05) !important;
+  transform: scale(0.97) !important;
+}
+
+/* 危险按钮 — 红色系 */
+.gh-btn-danger {
+  background: linear-gradient(135deg, #e55, #f77) !important;
+  color: #fff !important;
+}
+
+.gh-btn-danger:hover {
+  background: linear-gradient(135deg, #f66, #f88) !important;
+}
+
+.gh-btn-danger:active {
+  background: #c44 !important;
+  transform: scale(0.97) !important;
+}
+
+/* 小号按钮 */
+.gh-btn-sm {
+  padding: 5px 14px !important;
+  font-size: 12px !important;
+  border-radius: 6px !important;
+}
+
+/* 按钮禁用状态 */
+.gh-btn:disabled,
+.gh-btn[disabled] {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ============================================
+   5. 弹窗 / 对话框
+   ============================================ */
+.gh-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 2147483647 !important;
+  background: rgba(0, 0, 0, 0.55) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  animation: gh-fade-in 0.2s ease !important;
+}
+
+@keyframes gh-fade-in {
+  from { opacity: 0 !important; }
+  to { opacity: 1 !important; }
+}
+
+.gh-modal {
+  position: relative !important;
+  width: 360px !important;
+  max-width: 92vw !important;
+  max-height: 80vh !important;
+  background: var(--gh-bg-glass) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: var(--gh-radius-lg) !important;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6) !important;
+  padding: 28px 24px 24px !important;
+  color: var(--gh-text) !important;
+  animation: gh-modal-in 0.28s ease !important;
+  overflow-y: auto !important;
+}
+
+@keyframes gh-modal-in {
+  from {
+    opacity: 0 !important;
+    transform: scale(0.9) translateY(16px) !important;
+  }
+  to {
+    opacity: 1 !important;
+    transform: scale(1) translateY(0) !important;
+  }
+}
+
+.gh-modal-title {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  margin: 0 0 12px !important;
+}
+
+.gh-modal-body {
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: var(--gh-text) !important;
+  margin-bottom: 20px !important;
+}
+
+.gh-modal-footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+}
+
+/* ============================================
+   6. 状态标签
+   ============================================ */
+.gh-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 2px 10px !important;
+  border-radius: 20px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  line-height: 1.6 !important;
+  white-space: nowrap !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* 游玩中 — 绿色 */
+.gh-badge-playing {
+  background: rgba(80, 220, 140, 0.18) !important;
+  color: #6edb9e !important;
+  border: 1px solid rgba(80, 220, 140, 0.25) !important;
+}
+
+/* 等待中 — 橙色 */
+.gh-badge-waiting {
+  background: rgba(255, 180, 60, 0.18) !important;
+  color: #f0b34b !important;
+  border: 1px solid rgba(255, 180, 60, 0.25) !important;
+}
+
+/* 空闲 — 灰色 */
+.gh-badge-idle {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--gh-text-dim) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* 游戏中状态标记（小圆点装饰） */
+.gh-badge-dot {
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 50% !important;
+  display: inline-block !important;
+}
+
+.gh-badge-playing .gh-badge-dot {
+  background: #6edb9e !important;
+  box-shadow: 0 0 6px rgba(110, 219, 158, 0.6) !important;
+}
+
+.gh-badge-waiting .gh-badge-dot {
+  background: #f0b34b !important;
+  box-shadow: 0 0 6px rgba(240, 179, 75, 0.6) !important;
+  animation: gh-pulse-dot 1.4s ease-in-out infinite !important;
+}
+
+@keyframes gh-pulse-dot {
+  0%, 100% { opacity: 1 !important; transform: scale(1) !important; }
+  50% { opacity: 0.5 !important; transform: scale(0.85) !important; }
+}
+
+/* ============================================
+   7. 匹配队列 — 横向排列
+   ============================================ */
+.gh-queue {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 0 !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  list-style: none !important;
+  margin: 0 !important;
+}
+
+.gh-queue-item {
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 14px !important;
+  border-radius: 20px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  font-size: 13px !important;
+  color: var(--gh-text) !important;
+  animation: gh-queue-in 0.35s ease both !important;
+}
+
+@keyframes gh-queue-in {
+  from {
+    opacity: 0 !important;
+    transform: translateX(-12px) scale(0.92) !important;
+  }
+  to {
+    opacity: 1 !important;
+    transform: translateX(0) scale(1) !important;
+  }
+}
+
+/* 每个项目依次延迟入场 */
+.gh-queue-item:nth-child(1)  { animation-delay: 0.00s !important; }
+.gh-queue-item:nth-child(2)  { animation-delay: 0.05s !important; }
+.gh-queue-item:nth-child(3)  { animation-delay: 0.10s !important; }
+.gh-queue-item:nth-child(4)  { animation-delay: 0.15s !important; }
+.gh-queue-item:nth-child(5)  { animation-delay: 0.20s !important; }
+.gh-queue-item:nth-child(6)  { animation-delay: 0.25s !important; }
+.gh-queue-item:nth-child(7)  { animation-delay: 0.30s !important; }
+.gh-queue-item:nth-child(8)  { animation-delay: 0.35s !important; }
+.gh-queue-item:nth-child(9)  { animation-delay: 0.40s !important; }
+.gh-queue-item:nth-child(10) { animation-delay: 0.45s !important; }
+
+.gh-queue-avatar {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 102, 170, 0.2) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 14px !important;
+  flex-shrink: 0 !important;
+}
+
+.gh-queue-name {
+  font-weight: 600 !important;
+  color: #fff !important;
+  font-size: 13px !important;
+}
+
+/* ============================================
+   8. 自定义滚动条
+   ============================================ */
+.gh-body::-webkit-scrollbar,
+.gh-modal::-webkit-scrollbar,
+.gh-queue::-webkit-scrollbar {
+  width: var(--gh-scrollbar-width) !important;
+  height: var(--gh-scrollbar-width) !important;
+}
+
+.gh-body::-webkit-scrollbar-track,
+.gh-modal::-webkit-scrollbar-track,
+.gh-queue::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.gh-body::-webkit-scrollbar-thumb,
+.gh-modal::-webkit-scrollbar-thumb,
+.gh-queue::-webkit-scrollbar-thumb {
+  background: rgba(255, 102, 170, 0.25) !important;
+  border-radius: 4px !important;
+  transition: background var(--gh-transition-fast) !important;
+}
+
+.gh-body::-webkit-scrollbar-thumb:hover,
+.gh-modal::-webkit-scrollbar-thumb:hover,
+.gh-queue::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 102, 170, 0.4) !important;
+}
+
+/* Firefox 滚动条 */
+.gh-body,
+.gh-modal {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(255, 102, 170, 0.25) transparent !important;
+}
+
+/* ============================================
+   9. 分割线 / 间隔
+   ============================================ */
+.gh-divider {
+  height: 1px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  margin: 12px 0 !important;
+  border: none !important;
+}
+
+/* ============================================
+   10. 通用工具类
+   ============================================ */
+.gh-text-center { text-align: center !important; }
+.gh-text-muted  { color: var(--gh-text-dim) !important; }
+.gh-mt-8   { margin-top: 8px !important; }
+.gh-mt-12  { margin-top: 12px !important; }
+.gh-mt-16  { margin-top: 16px !important; }
+.gh-mb-8   { margin-bottom: 8px !important; }
+.gh-mb-12  { margin-bottom: 12px !important; }
+.gh-mb-16  { margin-bottom: 16px !important; }
+.gh-gap-8  { gap: 8px !important; }
+.gh-gap-12 { gap: 12px !important; }
+
+.gh-flex {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.gh-flex-between {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.gh-flex-center {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* ============================================
+   11. 空状态 / 加载
+   ============================================ */
+.gh-empty {
+  text-align: center !important;
+  padding: 32px 16px !important;
+  color: var(--gh-text-dim) !important;
+  font-size: 14px !important;
+}
+
+.gh-empty-icon {
+  font-size: 40px !important;
+  margin-bottom: 12px !important;
+  opacity: 0.5 !important;
+}
+
+/* 加载骨架动画 */
+.gh-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 75%
+  ) !important;
+  background-size: 200% 100% !important;
+  animation: gh-shimmer 1.5s infinite !important;
+  border-radius: var(--gh-radius-sm) !important;
+}
+
+@keyframes gh-shimmer {
+  0%   { background-position: 200% 0 !important; }
+  100% { background-position: -200% 0 !important; }
+}
+
+/* ============================================
+   12. 响应式 — 小屏幕适配
+   ============================================ */
+@media (max-width: 480px) {
+  .gh-panel {
+    width: calc(100vw - 32px) !important;
+    right: 16px !important;
+    bottom: 84px !important;
+  }
+
+  .gh-card {
+    height: 160px !important;
+  }
+
+  .gh-modal {
+    width: calc(100vw - 40px) !important;
+    padding: 20px 16px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .gh-panel {
+    width: 420px !important;
+  }
+}
