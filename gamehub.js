@@ -13,7 +13,12 @@
  *       用户只需加载 gamehub.js 这一个文件
  */
 (function () {
-  if (window.__ghAppInstalled) return;
+  // 如果已安装，清理旧状态重新初始化
+  if (window.__ghAppInstalled) {
+    // 清理旧 UI 元素，让 init 重建
+    if (window.GhUI && window.GhUI.reinit) window.GhUI.reinit();
+    return;
+  }
   window.__ghAppInstalled = true;
 
   /* ==================== 解析 CDN 基路径 ==================== */
