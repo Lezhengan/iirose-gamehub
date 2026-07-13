@@ -8,12 +8,9 @@
 
 ```js
 (async function(){
-  var B='https://cdn.jsdelivr.net/gh/Lezhengan/iirose-gamehub@main';
-  ['lib/core.js','lib/ui.js','lib/favicon.js','lib/assets.js','gamehub.js'].forEach(function(p){
-    var s=document.createElement('script');
-    s.src=B+'/'+p;
-    document.head.appendChild(s)
-  });
+  var s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/gh/Lezhengan/iirose-gamehub@main/gamehub.js';
+  document.head.appendChild(s);
 })();
 ```
 
