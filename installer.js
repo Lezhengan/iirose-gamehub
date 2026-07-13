@@ -5,7 +5,7 @@
  *
  *   // ====== 方法1: GitHub Pages 完整版 ======
  *   (function(){
- *     var BASE = 'https://你的用户名.github.io/iirose-gamehub';
+ *     var BASE = 'https://Lezhengan.github.io/iirose-gamehub';
  *     ['lib/core.js','lib/ui.js','lib/favicon.js','gamehub.js'].forEach(function(p){
  *       var s=document.createElement('script');
  *       s.src=BASE+'/'+p;
