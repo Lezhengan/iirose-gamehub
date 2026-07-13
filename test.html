@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>GameHub 本地测试</title>
+<style>
+  body { margin:0;padding:20px;background:#1a1a2e;color:#eee;font-family:sans-serif;min-height:100vh; }
+  #moveinput { width:300px;padding:8px;border:1px solid #555;background:#222;color:#fff;border-radius:4px; }
+  .sidebar-area { margin:20px 0;padding:10px;background:rgba(255,255,255,0.05);border-radius:8px; }
+  .functionButton { display:inline-flex;align-items:center;gap:8px;padding:8px 16px;margin:4px;background:rgba(255,255,255,0.08);border-radius:6px;cursor:pointer;color:#ccc; }
+  .functionButtonGroup { font-weight:bold;color:#888; }
+  .functionItemBox { display:flex;flex-wrap:wrap; }
+  .section { margin:12px 0;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px; }
+  .section h3 { margin:0 0 8px;font-size:14px;color:#aaa; }
+  #status { position:fixed;top:10px;right:10px;padding:6px 12px;background:#333;border-radius:4px;font-size:12px;z-index:9999999; }
+</style></head><body>
+<div id="status">等待加载…</div>
+<h1>🎮 GameHub 本地测试</h1>
+
+<div class="section">
+  <h3>侧边栏模拟</h3>
+  <div class="sidebar-area">
+    <div class="functionButton functionButtonGroup"><span class="functionBtnFont">工具</span></div>
+    <div class="functionItemBox"></div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>输入框（/gh 命令测试）</h3>
+  <input id="moveinput" placeholder="输入 /gh help 测试命令" style="width:300px;padding:8px;">
+</div>
+
+<div class="section">
+  <h3>测试按钮</h3>
+  <button onclick="testToggle()" style="padding:8px 16px;margin-right:8px;">切换面板 (toggle)</button>
+  <button onclick="testShow()" style="padding:8px 16px;margin-right:8px;">显示面板</button>
+  <button onclick="testHide()" style="padding:8px 16px;margin-right:8px;">隐藏面板</button>
+  <button onclick="testToast()" style="padding:8px 16px;">显示 Toast</button>
+  <button onclick="testModal()" style="padding:8px 16px;margin-left:8px;">显示弹窗</button>
+</div>
+
+<div class="section">
+  <h3>窗口</h3>
+  <p>current uid: <span id="uid-display">无</span></p>
+  <button onclick="setUid()">设 UID = test123</button>
+</div>
+
+<script>
+  // 模拟 iirosē 环境
+  window.uid = null;
+  window.socket = {
+    send: function(msg) {
+      var d = document.getElementById('status');
+      d.textContent = 'send: ' + msg.slice(0,80);
+      d.style.background = '#2a5a2a';
+      setTimeout(function(){d.style.background='#333';},1500);
+      console.log('[WS send]', msg);
+    },
+    addEventListener: function(evt, cb) {
+      console.log('[WS] 注册监听:', evt);
+      this._cb = cb;
+    }
+  };
+
+  // 修正 sidebar 结构（让 insertSidebarButton 能正确找到）
+  document.addEventListener('DOMContentLoaded', function() {
+    var itemBox = document.querySelector('.functionItemBox');
+    // insertSidebarButton 找的是 .functionButton.functionButtonGroup 标签
+    // 然后取 nextElementSibling 作为 .functionItemBox
+  });
+
+  function setUid() {
+    window.uid = 'test123';
+    document.getElementById('uid-display').textContent = 'test123';
+    document.getElementById('status').textContent = 'UID 已设置';
+  }
+
+  // 导出测试函数
+  function testToggle() { if(window.GhUI) window.GhUI.toggle(); else alert('GhUI 未加载'); }
+  function testShow() { if(window.GhUI) window.GhUI.show(); else alert('GhUI 未加载'); }
+  function testHide() { if(window.GhUI) window.GhUI.hide(); else alert('GhUI 未加载'); }
+  function testToast() { if(window.GhUI) window.GhUI.showToast('测试消息', false); else alert('GhUI 未加载'); }
+  function testModal() { if(window.GhUI) window.GhUI.showModal('测试标题','<p>弹窗内容</p>'); else alert('GhUI 未加载'); }
+
+  // 监听加载状态
+  var checkInterval = setInterval(function() {
+    var ready = !!(window.GhCore && window.GhUI && window.GhFavicon);
+    document.getElementById('status').textContent = ready ? '✅ 全部就绪' : '⏳ 加载中…';
+    if (ready) clearInterval(checkInterval);
+  }, 500);
+</script>
+
+<!-- 加载 gamehub.js -->
+<script src="gamehub.js"></script>
+</body></html>

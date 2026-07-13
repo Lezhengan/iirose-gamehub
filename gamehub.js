@@ -253,19 +253,34 @@
       callback(null, gameModules[gameId]);
       return;
     }
-    // 使用完整 CDN 路径，非相对路径
-    var url = BASE + '/games/' + gameId + '.js';
+    loadGameScript(gameId, BASE, function (err) {
+      if (err) {
+        // Pages 失败，降级 jsdelivr
+        console.warn('[GameHub] Pages 游戏模块加载失败，降级到 jsdelivr:', gameId);
+        loadGameScript(gameId, BASE_JSD, function (err2) {
+          if (err2) { callback(new Error('\u6E38\u620F\u6A21\u5757\u52A0\u8F7D\u5931\u8D25: ' + gameId), null); return; }
+          gameModules[gameId] = window.GameModules[gameId];
+          callback(null, gameModules[gameId]);
+        });
+        return;
+      }
+      gameModules[gameId] = window.GameModules[gameId];
+      callback(null, gameModules[gameId]);
+    });
+  }
+
+  function loadGameScript(gameId, base, cb) {
+    var url = base + '/games/' + gameId + '.js';
     var script = document.createElement('script');
     script.src = url;
     script.onload = function () {
       if (window.GameModules && window.GameModules[gameId]) {
-        gameModules[gameId] = window.GameModules[gameId];
-        callback(null, gameModules[gameId]);
+        cb(null);
       } else {
-        callback(new Error('\u6A21\u5757\u672A\u6CE8\u518C'), null);
+        cb(new Error('\u6A21\u5757\u672A\u6CE8\u518C'));
       }
     };
-    script.onerror = function () { callback(new Error('\u52A0\u8F7D\u5931\u8D25: ' + url), null); };
+    script.onerror = function () { cb(new Error('\u52A0\u8F7D\u5931\u8D25: ' + url)); };
     document.head.appendChild(script);
   }
 
