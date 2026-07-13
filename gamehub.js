@@ -31,22 +31,28 @@
   }
   window.__ghAppInstalled = true;
 
-  /* ==================== 解析 CDN 基路径 ==================== */
+  /* ==================== 基路径配置 ==================== */
+  var BASE_PAGES = 'https://lezhengan.github.io/iirose-gamehub';
+  var BASE_JSD = 'https://cdn.jsdelivr.net/gh/Lezhengan/iirose-gamehub@main';
   var BASE = '';
+
+  // 自动检测当前脚本加载来源
   var scripts = document.getElementsByTagName('script');
   for (var i = 0; i < scripts.length; i++) {
     var src = scripts[i].src || '';
-    var idx = src.indexOf('/gamehub.js');
-    if (idx !== -1) { BASE = src.substring(0, idx); break; }
+    if (src.indexOf('/gamehub.js') !== -1) {
+      BASE = src.replace('/gamehub.js', '');
+      break;
+    }
   }
-  // fallback: 如果从本地加载，用 GitHub raw
-  if (!BASE) BASE = 'https://cdn.jsdelivr.net/gh/Lezhengan/iirose-gamehub@main';
+  // 未检测到（本地加载），默认优先 GitHub Pages
+  if (!BASE) BASE = BASE_PAGES;
 
   /* ==================== 依赖列表 ==================== */
   var DEPS = [
-    { name: 'GhCore',    url: BASE + '/lib/core.js' },
-    { name: 'GhUI',      url: BASE + '/lib/ui.js' },
-    { name: 'GhFavicon', url: BASE + '/lib/favicon.js' },
+    { name: 'GhCore',    path: '/lib/core.js',    fallback: BASE_JSD + '/lib/core.js' },
+    { name: 'GhUI',      path: '/lib/ui.js',       fallback: BASE_JSD + '/lib/ui.js' },
+    { name: 'GhFavicon', path: '/lib/favicon.js', fallback: BASE_JSD + '/lib/favicon.js' },
   ];
 
   /* ==================== 游戏配置 ==================== */
@@ -68,11 +74,18 @@
   /* ==================== 依赖加载器 ==================== */
   var loaded = {};
 
-  function loadScript(url, cb) {
+  function loadScript(url, fallbackUrl, cb) {
     var s = document.createElement('script');
     s.src = url;
     s.onload = function () { cb(null); };
-    s.onerror = function () { cb(new Error('加载失败: ' + url)); };
+    s.onerror = function () {
+      if (fallbackUrl) {
+        console.warn('[GameHub] Pages \u52A0\u8F7D\u5931\u8D25\uFF0C\u964D\u7EA7\u5230 jsdelivr');
+        loadScript(fallbackUrl, null, cb);
+      } else {
+        cb(new Error('\u52A0\u8F7D\u5931\u8D25: ' + url));
+      }
+    };
     document.head.appendChild(s);
   }
 
@@ -88,7 +101,7 @@
         if (pending === 0) callback(null);
         return;
       }
-      loadScript(dep.url, function (err) {
+      loadScript(BASE + dep.path, dep.fallback, function (err) {
         if (err) {
           if (!hasErr) { hasErr = true; callback(err); }
           return;

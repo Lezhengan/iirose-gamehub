@@ -13,7 +13,7 @@ iirosē (蔷薇花园) 站内游戏大厅插件 — 10 款联机小游戏合集
 ```js
 (async function(){
   var s=document.createElement('script');
-  s.src='https://cdn.jsdelivr.net/gh/Lezhengan/iirose-gamehub@main/gamehub.js';
+  s.src='https://lezhengan.github.io/iirose-gamehub/gamehub.js';
   document.head.appendChild(s);
 })();
 ```
