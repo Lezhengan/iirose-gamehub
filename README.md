@@ -23,7 +23,7 @@
 
 ```js
 (async function(){
-  var B='https://cdn.jsdelivr.net/gh/你的GitHub用户名/iirose-gamehub@main';
+  var B='https://cdn.jsdelivr.net/gh/Lezhengan/iirose-gamehub@main';
   ['lib/core.js','lib/ui.js','lib/favicon.js','lib/assets.js','gamehub.js'].forEach(function(p){
     var s=document.createElement('script');
     s.src=B+'/'+p;
