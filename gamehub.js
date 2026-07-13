@@ -87,13 +87,17 @@
 
   /* ==================== 初始化 ==================== */
   function init() {
-    var core = window.GhCore;
-    var ui = window.GhUI;
+    initRetries++;
+    core = window.GhCore;
+    ui = window.GhUI;
 
-    // 确保所有必要依赖存在
     if (!core || !ui) {
-      console.warn('[GameHub] 依赖加载失败，重试...');
-      setTimeout(init, 500);
+      if (initRetries >= MAX_INIT_RETRIES) {
+        console.error('[GameHub] 依赖加载失败，已达最大重试次数 ' + MAX_INIT_RETRIES);
+        return;
+      }
+      console.warn('[GameHub] 依赖加载中... (' + initRetries + '/' + MAX_INIT_RETRIES + ')');
+      setTimeout(init, 1000);
       return;
     }
 
@@ -128,6 +132,8 @@
   var ui = null;
   var gameModules = {};
   var activeGames = {};
+  var initRetries = 0;
+  var MAX_INIT_RETRIES = 5;
 
   function parsePlayerCount(str) {
     var nums = str.match(/\d+/g);
