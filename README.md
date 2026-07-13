@@ -11,13 +11,8 @@ iirosē (蔷薇花园) 站内游戏大厅插件 — 10 款联机小游戏合集
 在 iirosē 聊天页按 `` ` `` 打开 JS 终端，粘贴执行：
 
 ```js
-(async function(){
-  var s=document.createElement('script');
-  s.src='https://cdn.jsdelivr.net/gh/Lezhengan/iirose-gamehub@main/gamehub.js';
-  document.head.appendChild(s);
-})();
+https://cdn.jsdelivr.net/gh/Lezhengan/iirose-gamehub@main/gamehub.js
 ```
-
 > 只需加载 **这一个文件**，所有依赖会自动加载。不支持油猴(Tampermonkey)。
 
 ## 使用
