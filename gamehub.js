@@ -15,8 +15,15 @@
 (function () {
   // 如果已安装，清理旧状态重新初始化
   if (window.__ghAppInstalled) {
-    // 清理旧 UI 元素，让 init 重建
+    console.log('[GameHub] 重新初始化...');
+    // 清理全局实例，让 bootstrap 全部重建
     if (window.GhUI && window.GhUI.reinit) window.GhUI.reinit();
+    if (window.GhCore && window.GhCore.cleanup) window.GhCore.cleanup();
+    window.GhCore = null;
+    window.GhUI = null;
+    window.GhFavicon = null;
+    // 走完整初始化流程
+    bootstrap();
     return;
   }
   window.__ghAppInstalled = true;
